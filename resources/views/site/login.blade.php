@@ -1,4 +1,4 @@
-<h3> Principal (view) </h3>
+<h3> Formulario de Login (view)</h3>
 
 <ul> 
     <li>

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use PHPUnit\TextUI\XmlConfiguration\Group;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,19 +14,35 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return 'Aqui esta o teste do retorno da rota';
-// });
+Route::get('/', 'PrincipalController@principal')->name('site.index');
+Route::get('/sobre-nos', 'SobreNosController@sobreNos')->name('site.sobrenos');
+Route::get('/contato', 'ContatoController@contato')->name('site.contato');
+Route::get('/login', 'LoginController@login')->name('site.login');
 
-Route::get('/', 'PrincipalController@principal');
+Route::prefix('/app')->group(function() {
 
-Route::get('/sobre-nos', 'SobreNosController@sobreNos');
-
-Route::get('/contato', 'ContatoController@contato');
-// Route::get('/sobre-nos', function () {
-//     return 'Sobre nós';
-// });
-
-Route::get('/contato/{nome}/{categoria}/{assunto}/{mensagem}', function (string $nome, string $categoria, string $assunto, string $mensagem) {
-    return "Informações: $nome - $categoria - $assunto - $mensagem";
+    Route::get('/clientes', 'ClientesNosController@clientes')->name('app.clientes');
+    Route::get('/fornecedores', 'FornecedoresController@fornecedores')->name('app.fornecedores');
+    Route::get('/produtos', 'ProdutosController@produtos')->name('app.produtos');
 });
+
+Route::get('/rota1', function() {
+    echo 'Rota 1';  
+})->name('site.rota1');
+
+Route::get('/rota2', function() {
+    return redirect()->route('site.rota1');  
+})->name('site.rota2');
+
+//Route::redirect('/rota2', '/rota1');
+
+Route::fallback(function() {
+    echo 'A rota acessada não existe <a href="'.route('site.index').'"> Clique Aqui</a> para ir para a página inicial';
+});
+
+// Route::get('/contato/{nome}/{categoria_id}', function (
+//     string $nome,
+//     int $categoria_id = 1 // 1 - 'Informação'
+// ) {
+//     return "Informações: $nome - $categoria_id";
+// })->where('categoria_id', '[0-9]+') ->where('nome', '[A-Za-z]+');
